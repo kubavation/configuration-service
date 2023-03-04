@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: CONFIGURATION-SERVICE
+server:
+  port: 0
+eureka:
+  client:
+    service-url:defaultZone=http://eureka:password@localhost:8777/eureka/
