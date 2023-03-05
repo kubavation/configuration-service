@@ -1,6 +1,14 @@
 spring:
   application:
     name: CONFIGURATION-SERVICE
+  data:
+    mongodb:
+      authentication-database: admin
+      username: root
+      password: root
+      database: configuration
+      port: 27017
+      host: localhost
 server:
   port: 0
 eureka:
