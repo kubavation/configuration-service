@@ -15,7 +15,9 @@ class ModuleConfigurationService(val repository: ModuleConfigurationRepository) 
        return repository.moduleConfiguration(moduleName) ?: throw RuntimeException("Configuration for module $moduleName not found");
     }
 
-    fun saveModuleConfiguration(moduleConfig: ModuleConfiguration) {
-        repository.save(moduleConfig)
+    fun setModuleConfiguration(moduleName: String, config: ModuleConfigurationDTO) {
+       repository.findByName(moduleName)?.let {
+           repository.save(it.copy(configurations = config.configuration)) }
+               ?: throw RuntimeException("Module $moduleName not found")
     }
 }
