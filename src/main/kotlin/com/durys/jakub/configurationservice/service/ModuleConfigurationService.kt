@@ -1,6 +1,7 @@
 package com.durys.jakub.configurationservice.service
 
 import com.durys.jakub.configurationservice.model.ModuleConfiguration
+import com.durys.jakub.configurationservice.model.ModuleConfigurationDTO
 import com.durys.jakub.configurationservice.repository.ModuleConfigurationRepository
 import org.springframework.stereotype.Service
 import java.lang.RuntimeException
@@ -10,7 +11,7 @@ class ModuleConfigurationService(val repository: ModuleConfigurationRepository) 
 
     fun availableModules() = repository.availableModules()
 
-    fun moduleConfiguration(moduleName: String): ModuleConfiguration {
+    fun moduleConfiguration(moduleName: String): ModuleConfigurationDTO {
        return repository.moduleConfiguration(moduleName) ?: throw RuntimeException("Configuration for module $moduleName not found");
     }
 
