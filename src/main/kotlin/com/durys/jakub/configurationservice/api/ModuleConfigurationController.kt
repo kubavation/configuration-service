@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@RequestMapping("/api")
+@RequestMapping("/api/modules")
 @RestController
 class ModuleConfigurationController(val moduleConfigurationService: ModuleConfigurationService) {
 
-    @GetMapping("/modules/{moduleName}")
+    @GetMapping
+    fun getAvailableModules() = moduleConfigurationService.availableModules()
+
+    @GetMapping("/{moduleName}")
     fun getModuleConfiguration(@PathVariable moduleName: String): ModuleConfiguration {
         return moduleConfigurationService.moduleConfiguration(moduleName);
     }

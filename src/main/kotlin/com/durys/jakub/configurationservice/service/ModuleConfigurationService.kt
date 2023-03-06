@@ -8,6 +8,8 @@ import java.lang.RuntimeException
 @Service
 class ModuleConfigurationService(val repository: ModuleConfigurationRepository) {
 
+    fun availableModules() = repository.availableModules()
+
     fun moduleConfiguration(moduleName: String): ModuleConfiguration {
        return repository.moduleConfiguration(moduleName) ?: throw RuntimeException("Configuration for module $moduleName not found");
     }
