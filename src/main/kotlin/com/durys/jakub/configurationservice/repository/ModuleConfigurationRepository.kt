@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.repository.Query
 
 interface ModuleConfigurationRepository: MongoRepository<ModuleConfiguration, String> {
 
+    fun findByName(moduleName: String): ModuleConfiguration?
+
     @Query("{'name': ?0, 'active': true}")
     fun moduleConfiguration(moduleName: String): ModuleConfiguration?
 
