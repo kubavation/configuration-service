@@ -18,4 +18,14 @@ class ModuleConfigurationService(val repository: ModuleConfigurationRepository) 
            repository.save(it.copy(configurations = config.configuration)) }
                ?: throw RuntimeException("Module $moduleName not found")
     }
+
+    fun isConfigEnabled(moduleName: String, configName: String): Boolean {
+        return repository.moduleConfiguration(moduleName)?.let {
+            it.configuration.stream()
+                .filter { c -> c.name == configName }
+                .map { c -> c.value }
+                .findFirst()
+                .orElse(false)
+        } ?: false
+    }
 }

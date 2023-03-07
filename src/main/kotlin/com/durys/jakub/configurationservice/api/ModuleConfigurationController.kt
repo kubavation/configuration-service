@@ -24,6 +24,11 @@ class ModuleConfigurationController(val moduleConfigurationService: ModuleConfig
         return moduleConfigurationService.moduleConfiguration(moduleName)
     }
 
+    @GetMapping("/{moduleName}/configuration/{configName}")
+    fun isConfigEnabled(@PathVariable moduleName: String, @PathVariable configName: String): Boolean {
+        return moduleConfigurationService.isConfigEnabled(moduleName, configName)
+    }
+
     @CachePut(value = ["config"], key = "#moduleName")
     @PostMapping("/{moduleName}")
     fun setModuleConfiguration(@PathVariable moduleName: String, @RequestBody config: ModuleConfigurationDTO) {
