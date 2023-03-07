@@ -2,6 +2,8 @@ package com.durys.jakub.configurationservice.api
 
 import com.durys.jakub.configurationservice.model.ModuleConfigurationDTO
 import com.durys.jakub.configurationservice.service.ModuleConfigurationService
+import org.springframework.cache.annotation.CachePut
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,11 +18,13 @@ class ModuleConfigurationController(val moduleConfigurationService: ModuleConfig
     @GetMapping
     fun getAvailableModules() = moduleConfigurationService.availableModules()
 
+    @Cacheable(value = ["config"], key = "#moduleName")
     @GetMapping("/{moduleName}")
     fun getModuleConfiguration(@PathVariable moduleName: String): ModuleConfigurationDTO {
         return moduleConfigurationService.moduleConfiguration(moduleName)
     }
 
+    @CachePut(value = ["config"], key = "#moduleName")
     @PostMapping("/{moduleName}")
     fun setModuleConfiguration(@PathVariable moduleName: String, @RequestBody config: ModuleConfigurationDTO) {
         moduleConfigurationService.setModuleConfiguration(moduleName, config)
