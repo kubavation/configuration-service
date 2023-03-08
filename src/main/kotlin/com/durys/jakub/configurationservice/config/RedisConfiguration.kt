@@ -13,7 +13,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext.Seria
 
 @Configuration
 @EnableCaching
-class RedisConfiguration: LettuceClientConfigurationBuilderCustomizer {
+internal class RedisConfiguration: LettuceClientConfigurationBuilderCustomizer {
 
     override fun customize(clientConfigurationBuilder: LettuceClientConfiguration.LettuceClientConfigurationBuilder?) {
         clientConfigurationBuilder?.clientOptions(ClientOptions.builder()

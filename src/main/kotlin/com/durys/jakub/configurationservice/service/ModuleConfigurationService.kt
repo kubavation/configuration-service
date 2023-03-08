@@ -5,7 +5,7 @@ import com.durys.jakub.configurationservice.repository.ModuleConfigurationReposi
 import org.springframework.stereotype.Service
 
 @Service
-class ModuleConfigurationService(val repository: ModuleConfigurationRepository) {
+internal class ModuleConfigurationService(val repository: ModuleConfigurationRepository) {
 
     fun availableModules() = repository.availableModules()
 

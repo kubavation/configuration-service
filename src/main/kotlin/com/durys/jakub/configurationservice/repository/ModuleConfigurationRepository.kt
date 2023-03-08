@@ -6,7 +6,7 @@ import com.durys.jakub.configurationservice.model.ModuleDTO
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.data.mongodb.repository.Query
 
-interface ModuleConfigurationRepository: MongoRepository<ModuleConfiguration, String> {
+internal interface ModuleConfigurationRepository: MongoRepository<ModuleConfiguration, String> {
 
     fun findByName(moduleName: String): ModuleConfiguration?
 

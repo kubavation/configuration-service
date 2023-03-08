@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/modules")
 @RestController
-class ModuleConfigurationController(val moduleConfigurationService: ModuleConfigurationService) {
+internal class ModuleConfigurationController(val moduleConfigurationService: ModuleConfigurationService) {
 
     @GetMapping
     fun getAvailableModules() = moduleConfigurationService.availableModules()
