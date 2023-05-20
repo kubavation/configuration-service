@@ -1,6 +1,6 @@
 package com.durys.jakub.configurationservice.context.infrastructure.`in`
 
-import com.durys.jakub.configurationservice.context.infrastructure.ContextDTO
+import com.durys.jakub.configurationservice.context.infrastructure.model.ContextDTO
 import com.durys.jakub.configurationservice.context.infrastructure.ContextRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
