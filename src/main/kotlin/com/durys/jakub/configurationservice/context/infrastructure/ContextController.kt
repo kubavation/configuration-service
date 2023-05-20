@@ -1,6 +1,5 @@
-package com.durys.jakub.configurationservice.controller
+package com.durys.jakub.configurationservice.context.infrastructure
 
-import com.durys.jakub.configurationservice.model.ContextDTO
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
