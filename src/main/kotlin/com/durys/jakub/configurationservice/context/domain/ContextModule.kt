@@ -1,3 +1,3 @@
 package com.durys.jakub.configurationservice.context.domain
 
-internal class ContextModule(moduleName: String)
+internal data class ContextModule(val moduleName: String)

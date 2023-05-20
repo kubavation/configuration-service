@@ -3,6 +3,7 @@ package com.durys.jakub.configurationservice.context.infrastructure.`in`
 import com.durys.jakub.configurationservice.context.domain.ContextModule
 import com.durys.jakub.configurationservice.context.infrastructure.model.ContextDTO
 import com.durys.jakub.configurationservice.context.infrastructure.ContextRepository
+import com.durys.jakub.configurationservice.context.infrastructure.model.ContextModuleDTO
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -20,9 +21,10 @@ internal class ContextController(val contextRepository: ContextRepository) {
     }
 
     @GetMapping("/{context}/modules")
-    fun getContextModules(@PathVariable context: String): List<ContextModule> {
+    fun getContextModules(@PathVariable context: String): List<ContextModuleDTO> {
         return contextRepository.findById(context)
-                .map { it.modules }
+                .map { it.modules.map { module -> ContextModuleDTO(module.moduleName) } }
                 .orElse(listOf())
     }
+
 }
