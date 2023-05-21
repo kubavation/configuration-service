@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service
 @Service
 internal class ModuleConfigurationService(val repository: ModuleConfigurationRepository) {
 
-    fun availableModules() = repository.availableModules()
-
     fun moduleConfiguration(moduleName: String): ModuleConfigurationDTO {
        return repository.moduleConfiguration(moduleName) ?: throw RuntimeException("Configuration for module $moduleName not found");
     }

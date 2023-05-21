@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class ModuleConfigurationController(val moduleConfigurationService: ModuleConfigurationService) {
 
-    @GetMapping
-    fun getAvailableModules() = moduleConfigurationService.availableModules()
-
     @Cacheable(value = ["config"], key = "#moduleName")
     @GetMapping("/{moduleName}")
     fun getModuleConfiguration(@PathVariable moduleName: String): ModuleConfigurationDTO {
