@@ -1,8 +1,8 @@
-package com.durys.jakub.configurationservice.moduleconfiguration.repository
+package com.durys.jakub.configurationservice.moduleconfiguration.infrastructure
 
-import com.durys.jakub.configurationservice.moduleconfiguration.model.ModuleConfiguration
-import com.durys.jakub.configurationservice.moduleconfiguration.model.ModuleConfigurationDTO
-import com.durys.jakub.configurationservice.moduleconfiguration.model.ModuleDTO
+import com.durys.jakub.configurationservice.moduleconfiguration.domain.ModuleConfiguration
+import com.durys.jakub.configurationservice.moduleconfiguration.infrastructure.model.ModuleConfigurationDTO
+import com.durys.jakub.configurationservice.moduleconfiguration.infrastructure.model.ModuleDTO
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.data.mongodb.repository.Query
 

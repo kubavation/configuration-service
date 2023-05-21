@@ -1,7 +1,7 @@
 package com.durys.jakub.configurationservice.moduleconfiguration.api
 
-import com.durys.jakub.configurationservice.moduleconfiguration.model.ModuleConfigurationDTO
-import com.durys.jakub.configurationservice.moduleconfiguration.service.ModuleConfigurationService
+import com.durys.jakub.configurationservice.moduleconfiguration.infrastructure.model.ModuleConfigurationDTO
+import com.durys.jakub.configurationservice.moduleconfiguration.application.ModuleConfigurationService
 import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.web.bind.annotation.GetMapping
