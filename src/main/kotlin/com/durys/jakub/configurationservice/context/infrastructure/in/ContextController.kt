@@ -6,6 +6,7 @@ import com.durys.jakub.configurationservice.context.infrastructure.ContextReposi
 import com.durys.jakub.configurationservice.context.infrastructure.model.ContextModuleDTO
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -27,4 +28,11 @@ internal class ContextController(val contextRepository: ContextRepository) {
                 .orElse(listOf())
     }
 
+    @GetMapping("/{context}/modules")
+    fun setContextModules(@PathVariable context: String, @RequestBody modules: List<ContextModuleDTO>) {
+        val entity = contextRepository.findById(context)
+                .orElseThrow { RuntimeException("not found") }
+        entity.modules = modules.map { ContextModule(it.name) }
+        contextRepository.save(entity)
+    }
 }
