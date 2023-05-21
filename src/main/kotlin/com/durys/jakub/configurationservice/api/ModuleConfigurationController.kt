@@ -1,4 +1,4 @@
-package com.durys.jakub.configurationservice.moduleconfiguration.api
+package com.durys.jakub.configurationservice.api
 
 import com.durys.jakub.configurationservice.moduleconfiguration.infrastructure.model.ModuleConfigurationDTO
 import com.durys.jakub.configurationservice.moduleconfiguration.application.ModuleConfigurationService
