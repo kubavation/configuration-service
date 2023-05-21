@@ -6,6 +6,7 @@ import com.durys.jakub.configurationservice.module.infrastructure.ModuleReposito
 import com.durys.jakub.configurationservice.module.infrastructure.model.ConfigurationPatternDTO
 import com.durys.jakub.configurationservice.module.infrastructure.model.ModuleDTO
 import com.durys.jakub.configurationservice.sharedkernel.exception.EntityNotFoundException
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -29,10 +30,12 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
 
     @PatchMapping("/{name}/configuration-pattern")
     fun setModuleConfigurationPatterns(@PathVariable name: String, @RequestBody configPatterns: List<ConfigurationPatternDTO>) {
-        moduleRepository.findById(name)
+       val module = moduleRepository.findById(name)
                 .map { Module(it.name, it.description, it.configPatterns + to(configPatterns)) }
                 .orElseThrow { EntityNotFoundException(name) }
+        moduleRepository.save(module)
     }
+
 
     private fun to(configPatterns: List<ConfigurationPatternDTO>): List<ModuleConfigurationPattern> {
        return configPatterns.map {
