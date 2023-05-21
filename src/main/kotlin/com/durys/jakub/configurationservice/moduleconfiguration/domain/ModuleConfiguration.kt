@@ -1,6 +1,5 @@
 package com.durys.jakub.configurationservice.moduleconfiguration.domain
 
-import com.durys.jakub.configurationservice.moduleconfiguration.domain.Configuration
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
