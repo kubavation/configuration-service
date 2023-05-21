@@ -1,4 +1,4 @@
-package com.durys.jakub.configurationservice.model
+package com.durys.jakub.configurationservice.moduleconfiguration.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document

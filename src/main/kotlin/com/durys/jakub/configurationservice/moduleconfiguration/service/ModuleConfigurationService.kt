@@ -1,7 +1,7 @@
-package com.durys.jakub.configurationservice.service
+package com.durys.jakub.configurationservice.moduleconfiguration.service
 
-import com.durys.jakub.configurationservice.model.ModuleConfigurationDTO
-import com.durys.jakub.configurationservice.repository.ModuleConfigurationRepository
+import com.durys.jakub.configurationservice.moduleconfiguration.model.ModuleConfigurationDTO
+import com.durys.jakub.configurationservice.moduleconfiguration.repository.ModuleConfigurationRepository
 import org.springframework.stereotype.Service
 
 @Service
