@@ -36,6 +36,13 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
         moduleRepository.save(module)
     }
 
+    @DeleteMapping("/{name}/configuration-pattern/{pattern}")
+    fun deleteModuleConfigurationPattern(@PathVariable name: String, @PathVariable pattern: String) {
+        val module = moduleRepository.findById(name)
+                .orElseThrow { EntityNotFoundException(name) }
+        module.configPatterns = module.configPatterns.filter { it.name != pattern }
+        moduleRepository.save(module)
+    }
 
     private fun to(configPatterns: List<ConfigurationPatternDTO>): List<ModuleConfigurationPattern> {
        return configPatterns.map {
