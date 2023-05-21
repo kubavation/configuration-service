@@ -1,5 +1,6 @@
 package com.durys.jakub.configurationservice.context.infrastructure.`in`
 
+import com.durys.jakub.configurationservice.context.domain.Context
 import com.durys.jakub.configurationservice.context.domain.ContextModule
 import com.durys.jakub.configurationservice.context.infrastructure.model.ContextDTO
 import com.durys.jakub.configurationservice.context.infrastructure.ContextRepository
@@ -31,8 +32,8 @@ internal class ContextController(val contextRepository: ContextRepository) {
     @GetMapping("/{context}/modules")
     fun setContextModules(@PathVariable context: String, @RequestBody modules: List<ContextModuleDTO>) {
         val entity = contextRepository.findById(context)
+                .map { Context(it.name, modules.map {module -> ContextModule(module.name)}) }
                 .orElseThrow { RuntimeException("not found") }
-        entity.modules = modules.map { ContextModule(it.name) }
         contextRepository.save(entity)
     }
 }
