@@ -44,6 +44,19 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
         moduleRepository.save(module)
     }
 
+    @PatchMapping("/{name}/configuration-pattern/{pattern}")
+    fun patchModuleConfigurationPattern(@PathVariable name: String, @PathVariable pattern: String,
+                                        @RequestBody configPattern: ConfigurationPatternDTO) {
+        val module = moduleRepository.findById(name)
+                .orElseThrow { EntityNotFoundException(name) }
+
+        module.configPatterns = module.configPatterns.filter { it.name != pattern } + module.configPatterns.filter { it.name == pattern }
+                .map { ModuleConfigurationPattern(it.name, configPattern.description, configPattern.defaultValue) }
+                .first()
+
+        moduleRepository.save(module)
+    }
+
     private fun to(configPatterns: List<ConfigurationPatternDTO>): List<ModuleConfigurationPattern> {
        return configPatterns.map {
             pattern -> ModuleConfigurationPattern(pattern.name, pattern.description, pattern.defaultValue) }
