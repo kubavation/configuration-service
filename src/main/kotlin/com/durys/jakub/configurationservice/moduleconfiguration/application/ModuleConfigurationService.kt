@@ -12,7 +12,7 @@ internal class ModuleConfigurationService(val repository: ModuleConfigurationRep
     }
 
     fun setModuleConfiguration(moduleName: String, config: ModuleConfigurationDTO) {
-       repository.findByName(moduleName)?.let {
+       repository.findByModule(moduleName)?.let {
            repository.save(it.copy(configurations = config.configuration)) }
                ?: throw RuntimeException("Module $moduleName not found")
     }
