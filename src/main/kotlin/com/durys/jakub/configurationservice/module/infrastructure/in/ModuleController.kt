@@ -23,14 +23,14 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
 
     @GetMapping("/{name}/configuration-pattern")
     fun getModuleConfigurationPattern(@PathVariable name: String): List<ConfigurationPatternDTO> {
-       return moduleRepository.findById(name)
+       return moduleRepository.findByName(name)
                 .map { it.configPatterns.map {pattern -> ConfigurationPatternDTO(pattern.name, pattern.description, pattern.defaultValue) } }
                 .orElseThrow { EntityNotFoundException(name) }
     }
 
     @PatchMapping("/{name}/configuration-pattern")
     fun setModuleConfigurationPatterns(@PathVariable name: String, @RequestBody configPatterns: List<ConfigurationPatternDTO>) {
-       val module = moduleRepository.findById(name)
+       val module = moduleRepository.findByName(name)
                 .map { Module(it.name, it.description, it.configPatterns + to(configPatterns)) }
                 .orElseThrow { EntityNotFoundException(name) }
         moduleRepository.save(module)
@@ -38,7 +38,7 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
 
     @DeleteMapping("/{name}/configuration-pattern/{pattern}")
     fun deleteModuleConfigurationPattern(@PathVariable name: String, @PathVariable pattern: String) {
-        val module = moduleRepository.findById(name)
+        val module = moduleRepository.findByName(name)
                 .orElseThrow { EntityNotFoundException(name) }
         module.configPatterns = module.configPatterns.filter { it.name != pattern }
         moduleRepository.save(module)
@@ -47,7 +47,7 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
     @PatchMapping("/{name}/configuration-pattern/{pattern}")
     fun patchModuleConfigurationPattern(@PathVariable name: String, @PathVariable pattern: String,
                                         @RequestBody configPattern: ConfigurationPatternDTO) {
-        val module = moduleRepository.findById(name)
+        val module = moduleRepository.findByName(name)
                 .orElseThrow { EntityNotFoundException(name) }
 
         module.configPatterns = module.configPatterns.filter { it.name != pattern } + module.configPatterns.filter { it.name == pattern }
