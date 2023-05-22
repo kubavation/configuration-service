@@ -26,7 +26,7 @@ internal class ContextController(val contextRepository: ContextRepository) {
                 .orElse(listOf())
     }
 
-    @GetMapping("/{context}/modules")
+    @PatchMapping("/{context}/modules")
     fun setContextModules(@PathVariable context: String, @RequestBody modules: List<ContextModuleDTO>) {
         val entity = contextRepository.findById(context)
                 .map { Context(it.name, modules.map {module -> ContextModule(module.name)}) }
