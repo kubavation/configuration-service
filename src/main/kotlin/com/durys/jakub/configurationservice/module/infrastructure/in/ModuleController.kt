@@ -1,6 +1,5 @@
 package com.durys.jakub.configurationservice.module.infrastructure.`in`
 
-import com.durys.jakub.configurationservice.module.domain.Module
 import com.durys.jakub.configurationservice.module.domain.ModuleConfigurationPattern
 import com.durys.jakub.configurationservice.module.infrastructure.ModuleRepository
 import com.durys.jakub.configurationservice.module.infrastructure.model.ConfigurationPatternDTO
@@ -31,7 +30,7 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
     @PatchMapping("/{name}/configuration-pattern")
     fun setModuleConfigurationPatterns(@PathVariable name: String, @RequestBody configPatterns: List<ConfigurationPatternDTO>) {
        val module = moduleRepository.findByName(name)
-                .map { it with to(configPatterns) }
+                .map { it with asConfigPatterns(configPatterns) }
                 .orElseThrow { EntityNotFoundException(name) }
 
         moduleRepository.save(module)
@@ -58,7 +57,7 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
         moduleRepository.save(module)
     }
 
-    private fun to(configPatterns: List<ConfigurationPatternDTO>): List<ModuleConfigurationPattern> {
+    private fun asConfigPatterns(configPatterns: List<ConfigurationPatternDTO>): List<ModuleConfigurationPattern> {
        return configPatterns.map {
             pattern -> ModuleConfigurationPattern(pattern.name, pattern.description, pattern.defaultValue) }
     }
