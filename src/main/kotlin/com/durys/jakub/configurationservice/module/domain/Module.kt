@@ -9,4 +9,9 @@ internal class Module(@Id val id: String, val name: String, val description: Str
                       var configPatterns: List<ModuleConfigurationPattern> = listOf()) {
     constructor(name: String, description: String, configPatterns: List<ModuleConfigurationPattern>)
             : this(UUID.randomUUID().toString(), name, description, configPatterns)
+
+    infix fun with(patterns: List<ModuleConfigurationPattern>): Module {
+        this.configPatterns = this.configPatterns + patterns
+        return this
+    }
 }

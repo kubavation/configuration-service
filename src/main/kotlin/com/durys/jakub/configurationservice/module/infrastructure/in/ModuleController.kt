@@ -31,8 +31,9 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
     @PatchMapping("/{name}/configuration-pattern")
     fun setModuleConfigurationPatterns(@PathVariable name: String, @RequestBody configPatterns: List<ConfigurationPatternDTO>) {
        val module = moduleRepository.findByName(name)
-                .map { Module(it.name, it.description, it.configPatterns + to(configPatterns)) }
+                .map { it with to(configPatterns) }
                 .orElseThrow { EntityNotFoundException(name) }
+
         moduleRepository.save(module)
     }
 
