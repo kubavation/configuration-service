@@ -35,6 +35,13 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
         moduleRepository.save(module)
     }
 
+    @DeleteMapping("/{name}")
+    fun deleteModule(@PathVariable name: String) {
+        val module = moduleRepository.findByName(name)
+                .orElseThrow { EntityNotFoundException(name) }
+        moduleRepository.delete(module)
+    }
+
 
     @GetMapping("/{name}/configuration-pattern")
     fun getModuleConfigurationPattern(@PathVariable name: String): List<ConfigurationPatternDTO> {
