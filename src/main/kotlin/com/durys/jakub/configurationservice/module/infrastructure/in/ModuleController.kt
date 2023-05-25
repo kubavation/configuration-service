@@ -26,6 +26,16 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
     @PostMapping
     fun addModule(@RequestBody moduleDTO: ModuleDTO) = moduleRepository.save(Module(moduleDTO.name, moduleDTO.description, emptyList()))
 
+    @PatchMapping("/{name}")
+    fun editModule(@PathVariable name: String, @RequestBody moduleDTO: ModuleDTO) {
+
+        val module = moduleRepository.findByName(name)
+                .map { Module(it.id, moduleDTO.name, moduleDTO.description, it.configPatterns) }
+                .orElseThrow { EntityNotFoundException(name) }
+        moduleRepository.save(module)
+    }
+
+
     @GetMapping("/{name}/configuration-pattern")
     fun getModuleConfigurationPattern(@PathVariable name: String): List<ConfigurationPatternDTO> {
        return moduleRepository.findByName(name)
