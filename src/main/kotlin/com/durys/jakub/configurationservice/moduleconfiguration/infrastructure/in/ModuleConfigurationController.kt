@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*
 @RestController
 internal class ModuleConfigurationController(val moduleConfigurationService: ModuleConfigurationService) {
 
-    @Cacheable(value = ["config"], key = "#moduleName")
+    @Cacheable(value = ["config"], key = "#context.#moduleName")
     @GetMapping("/{context}/{moduleName}")
     fun getModuleConfiguration(@PathVariable context: String, @PathVariable moduleName: String): ModuleConfigurationDTO {
         return moduleConfigurationService.moduleConfiguration(moduleName)
     }
 
-    @CachePut(value = ["config"], key = "#moduleName")
+    @CachePut(value = ["config"], key = "#context.#moduleName")
     @PostMapping("/{context}/{moduleName}")
     fun setModuleConfiguration(@PathVariable context: String, @PathVariable moduleName: String, @RequestBody config: ModuleConfigurationDTO) {
         moduleConfigurationService.setModuleConfiguration(moduleName, config)
