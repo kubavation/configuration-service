@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class ModuleConfigurationApi(val moduleConfigurationService: ModuleConfigurationService) {
 
-    @Cacheable(value = ["config"], key = "#moduleName")
-    @GetMapping("/{moduleName}/configuration")
-    fun getModuleConfiguration(@PathVariable moduleName: String): ModuleConfigurationDTO {
-        return moduleConfigurationService.moduleConfiguration(moduleName)
+    @Cacheable(value = ["config"], key = "#context.#moduleName")
+    @GetMapping("/{context}/{moduleName}/configuration")
+    fun getModuleConfiguration(@PathVariable context: String, @PathVariable moduleName: String): ModuleConfigurationDTO {
+        return moduleConfigurationService.moduleConfiguration(context, moduleName)
     }
 
-    @GetMapping("/{moduleName}/configuration/{configName}")
-    fun isConfigEnabled(@PathVariable moduleName: String, @PathVariable configName: String): Boolean {
-        return moduleConfigurationService.isConfigEnabled(moduleName, configName)
+    @GetMapping("/{context}/{moduleName}/configuration/{configName}")
+    fun isConfigEnabled(@PathVariable context: String, @PathVariable moduleName: String, @PathVariable configName: String): Boolean {
+        return moduleConfigurationService.isConfigEnabled(context, moduleName, configName)
     }
 }
