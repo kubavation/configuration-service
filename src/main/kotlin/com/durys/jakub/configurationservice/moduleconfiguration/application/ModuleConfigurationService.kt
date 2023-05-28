@@ -10,7 +10,8 @@ internal class ModuleConfigurationService(val moduleRepository: ModuleRepository
                                           val moduleConfigurationRepository: ModuleConfigurationRepository) {
 
     fun moduleConfiguration(context: String, moduleName: String): ModuleConfigurationDTO {
-       return moduleConfigurationRepository.moduleConfiguration(moduleName) ?: throw RuntimeException("Configuration for module $moduleName not found");
+       return moduleConfigurationRepository.moduleConfiguration(context, moduleName)
+               ?: throw RuntimeException("Configuration for module $moduleName not found");
     }
 
     fun setModuleConfiguration(context: String, moduleName: String, config: ModuleConfigurationDTO) {
@@ -20,7 +21,7 @@ internal class ModuleConfigurationService(val moduleRepository: ModuleRepository
     }
 
     fun isConfigEnabled(context: String, moduleName: String, configName: String): Boolean {
-        return moduleConfigurationRepository.moduleConfiguration(moduleName)?.let {
+        return moduleConfigurationRepository.moduleConfiguration(context, moduleName)?.let {
             it.configuration.stream()
                 .filter { c -> c.name == configName }
                 .map { c -> c.value }

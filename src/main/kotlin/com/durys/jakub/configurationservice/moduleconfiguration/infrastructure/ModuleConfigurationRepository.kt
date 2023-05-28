@@ -9,6 +9,6 @@ internal interface ModuleConfigurationRepository: MongoRepository<ModuleConfigur
 
     fun findByModule(moduleName: String): ModuleConfiguration?
 
-    @Query("{'module': ?0, 'active': true}")
-    fun moduleConfiguration(moduleName: String): ModuleConfigurationDTO?
+    @Query("{'context': ?0, 'module': ?1}")
+    fun moduleConfiguration(context: String, moduleName: String): ModuleConfigurationDTO?
 }
