@@ -13,12 +13,12 @@ internal class ModuleConfigurationController(val moduleConfigurationService: Mod
     @Cacheable(value = ["config"], key = "#context.#moduleName")
     @GetMapping("/{context}/{moduleName}")
     fun getModuleConfiguration(@PathVariable context: String, @PathVariable moduleName: String): ModuleConfigurationDTO {
-        return moduleConfigurationService.moduleConfiguration(moduleName)
+        return moduleConfigurationService.moduleConfiguration(context, moduleName)
     }
 
     @CachePut(value = ["config"], key = "#context.#moduleName")
     @PostMapping("/{context}/{moduleName}")
     fun setModuleConfiguration(@PathVariable context: String, @PathVariable moduleName: String, @RequestBody config: ModuleConfigurationDTO) {
-        moduleConfigurationService.setModuleConfiguration(moduleName, config)
+        moduleConfigurationService.setModuleConfiguration(context, moduleName, config)
     }
 }
