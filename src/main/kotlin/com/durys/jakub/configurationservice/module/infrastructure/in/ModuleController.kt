@@ -65,9 +65,9 @@ internal class ModuleController(val moduleRepository: ModuleRepository, val doma
     @DeleteMapping("/{name}/configuration-pattern/{pattern}")
     fun deleteModuleConfigurationPattern(@PathVariable name: String, @PathVariable pattern: String) {
         val module = moduleRepository.findByName(name)
+                .map { it.configPatterns.filter {configPattern -> configPattern.name != pattern }; return@map it }
+                .map { moduleRepository.save(it)}
                 .orElseThrow { EntityNotFoundException(name) }
-        module.configPatterns = module.configPatterns.filter { it.name != pattern }
-        moduleRepository.save(module)
 
         domainEventPublisher.publish(ModuleConfigurationPatternChanged(module.name, module.configPatterns))
     }
@@ -75,6 +75,7 @@ internal class ModuleController(val moduleRepository: ModuleRepository, val doma
     @PatchMapping("/{name}/configuration-pattern/{pattern}")
     fun patchModuleConfigurationPattern(@PathVariable name: String, @PathVariable pattern: String,
                                         @RequestBody configPattern: ConfigurationPatternDTO) {
+
         val module = moduleRepository.findByName(name)
                 .orElseThrow { EntityNotFoundException(name) }
 
