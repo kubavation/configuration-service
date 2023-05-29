@@ -1,7 +1,9 @@
 package com.durys.jakub.configurationservice.module.infrastructure.`in`
 
+import com.durys.jakub.configurationservice.events.DomainEventPublisher
 import com.durys.jakub.configurationservice.module.domain.Module
 import com.durys.jakub.configurationservice.module.domain.ModuleConfigurationPattern
+import com.durys.jakub.configurationservice.module.domain.events.ModuleConfigurationPatternChanged
 import com.durys.jakub.configurationservice.module.infrastructure.ModuleRepository
 import com.durys.jakub.configurationservice.module.infrastructure.model.ConfigurationPatternDTO
 import com.durys.jakub.configurationservice.module.infrastructure.model.ModuleDTO
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/modules")
-internal class ModuleController(val moduleRepository: ModuleRepository) {
+internal class ModuleController(val moduleRepository: ModuleRepository, val domainEventPublisher: DomainEventPublisher) {
 
     @GetMapping
     fun getModules(): List<ModuleDTO> = moduleRepository.findAll().map { ModuleDTO(it.name, it.description) }
@@ -54,30 +56,36 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
     fun setModuleConfigurationPatterns(@PathVariable name: String, @RequestBody configPatterns: List<ConfigurationPatternDTO>) {
        val module = moduleRepository.findByName(name)
                 .map { it with asConfigPatterns(configPatterns) }
+                .map { moduleRepository.save(it) }
                 .orElseThrow { EntityNotFoundException(name) }
 
-        moduleRepository.save(module)
+        domainEventPublisher.publish(ModuleConfigurationPatternChanged(module.name, module.configPatterns))
     }
 
     @DeleteMapping("/{name}/configuration-pattern/{pattern}")
     fun deleteModuleConfigurationPattern(@PathVariable name: String, @PathVariable pattern: String) {
         val module = moduleRepository.findByName(name)
+                .map { it.configPatterns.filter {configPattern -> configPattern.name != pattern }; return@map it }
+                .map { moduleRepository.save(it)}
                 .orElseThrow { EntityNotFoundException(name) }
-        module.configPatterns = module.configPatterns.filter { it.name != pattern }
-        moduleRepository.save(module)
+
+        domainEventPublisher.publish(ModuleConfigurationPatternChanged(module.name, module.configPatterns))
     }
 
     @PatchMapping("/{name}/configuration-pattern/{pattern}")
     fun patchModuleConfigurationPattern(@PathVariable name: String, @PathVariable pattern: String,
                                         @RequestBody configPattern: ConfigurationPatternDTO) {
+
         val module = moduleRepository.findByName(name)
+                .map {module -> module.configPatterns.filter { it.name != pattern } + module.configPatterns.filter { it.name == pattern }
+                        .map { ModuleConfigurationPattern(it.name, configPattern.description, configPattern.defaultValue) }
+                        .first()
+                     return@map module
+                }
+                .map { moduleRepository.save(it) }
                 .orElseThrow { EntityNotFoundException(name) }
 
-        module.configPatterns = module.configPatterns.filter { it.name != pattern } + module.configPatterns.filter { it.name == pattern }
-                .map { ModuleConfigurationPattern(it.name, configPattern.description, configPattern.defaultValue) }
-                .first()
-
-        moduleRepository.save(module)
+        domainEventPublisher.publish(ModuleConfigurationPatternChanged(module.name, module.configPatterns))
     }
 
     private fun asConfigPatterns(configPatterns: List<ConfigurationPatternDTO>): List<ModuleConfigurationPattern> {

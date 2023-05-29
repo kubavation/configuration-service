@@ -14,16 +14,9 @@ internal class ModuleConfigurationEventHandler(val moduleConfigurationRepository
     @EventListener
     fun handle(event: ModuleConfigurationPatternChanged) {
         val moduleConfigurations = moduleConfigurationRepository.moduleConfigurations(event.module)
-                .map { updateConfiguration(it, event.patterns)}
+                .map { it.updateConfigurations(event.patterns)}
 
         moduleConfigurationRepository.saveAll(moduleConfigurations)
-    }
-
-    private fun updateConfiguration(moduleConfiguration: ModuleConfiguration, patterns: List<ModuleConfigurationPattern>): ModuleConfiguration {
-        patterns.forEach {
-            moduleConfiguration.addConfigurationIfNotExists(Configuration(it.name, it.description, it.defaultValue))
-        }
-        return moduleConfiguration
     }
 
 }
