@@ -6,4 +6,4 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 internal class ModuleConfigurationPatternChanged(id: UUID, at: LocalDateTime,
-                                                 val module: String, val patterns: ModuleConfigurationPattern): DomainEvent(id, at)
+                                                 val module: String, val patterns: List<ModuleConfigurationPattern>): DomainEvent(id, at)
