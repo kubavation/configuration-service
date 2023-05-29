@@ -77,13 +77,14 @@ internal class ModuleController(val moduleRepository: ModuleRepository, val doma
                                         @RequestBody configPattern: ConfigurationPatternDTO) {
 
         val module = moduleRepository.findByName(name)
+                .map {module -> module.configPatterns.filter { it.name != pattern } + module.configPatterns.filter { it.name == pattern }
+                        .map { ModuleConfigurationPattern(it.name, configPattern.description, configPattern.defaultValue) }
+                        .first()
+                     return@map module
+                }
+                .map { moduleRepository.save(it) }
                 .orElseThrow { EntityNotFoundException(name) }
 
-        module.configPatterns = module.configPatterns.filter { it.name != pattern } + module.configPatterns.filter { it.name == pattern }
-                .map { ModuleConfigurationPattern(it.name, configPattern.description, configPattern.defaultValue) }
-                .first()
-
-        moduleRepository.save(module)
         domainEventPublisher.publish(ModuleConfigurationPatternChanged(module.name, module.configPatterns))
     }
 
