@@ -5,4 +5,5 @@ import com.durys.jakub.configurationservice.module.domain.ModuleConfigurationPat
 import java.time.LocalDateTime
 import java.util.UUID
 
-internal class ModuleConfigurationPatternChanged(id: UUID, at: LocalDateTime, val patterns: ModuleConfigurationPattern): DomainEvent(id, at)
+internal class ModuleConfigurationPatternChanged(id: UUID, at: LocalDateTime,
+                                                 val module: String, val patterns: ModuleConfigurationPattern): DomainEvent(id, at)
