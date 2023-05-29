@@ -22,4 +22,4 @@ internal class ModuleConfigurationService(val moduleConfigurationRepository: Mod
     fun isConfigEnabled(context: String, moduleName: String, configName: String): Boolean {
         return moduleConfigurationRepository.moduleConfiguration(context, moduleName)?.configEnabled(configName) ?: false
     }
-}   
+}
