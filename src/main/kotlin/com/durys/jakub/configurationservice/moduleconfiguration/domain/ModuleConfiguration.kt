@@ -1,5 +1,6 @@
 package com.durys.jakub.configurationservice.moduleconfiguration.domain
 
+import com.durys.jakub.configurationservice.module.domain.ModuleConfigurationPattern
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -12,9 +13,17 @@ internal data class ModuleConfiguration(@Id val id: String, val context: String,
         return configurations.find { it.name == config }?.value ?: false;
     }
 
-    fun addConfigurationIfNotExists(configuration: Configuration) {
-        if (!hasConfiguration(configuration.name)) {
-            configurations = configurations + configuration
+    fun updateConfigurations(patterns: List<ModuleConfigurationPattern>): ModuleConfiguration {
+        configurations = patterns.flatMap{ updateConfiguration(it) }
+        return this
+    }
+
+    private fun updateConfiguration(pattern: ModuleConfigurationPattern): List<Configuration> {
+        return if (!hasConfiguration(pattern.name)) {
+            configurations + Configuration(pattern.name, pattern.description, pattern.defaultValue)
+        } else {
+            configurations.filter { it.name != pattern.name } + configurations.filter { it.name == pattern.name }
+                    .map { Configuration(it.name, pattern.description, it.value) }
         }
     }
 
