@@ -21,15 +21,15 @@ internal class ContextController(val contextRepository: ContextRepository) {
 
     @GetMapping("/{context}/modules")
     fun getContextModules(@PathVariable context: String): List<ContextModuleDTO> {
-        return contextRepository.findById(context)
+        return contextRepository.findByName(context)
                 .map { it.modules.map { module -> ContextModuleDTO(module.moduleName) } }
                 .orElse(listOf())
     }
 
     @PatchMapping("/{context}/modules")
     fun setContextModules(@PathVariable context: String, @RequestBody modules: List<ContextModuleDTO>) {
-        val entity = contextRepository.findById(context)
-                .map { Context(it.name, modules.map {module -> ContextModule(module.name)}) }
+        val entity = contextRepository.findByName(context)
+                .map { Context(it.id, it.name, modules.map {module -> ContextModule(module.name)}) }
                 .orElseThrow { EntityNotFoundException(context) }
         contextRepository.save(entity)
     }
