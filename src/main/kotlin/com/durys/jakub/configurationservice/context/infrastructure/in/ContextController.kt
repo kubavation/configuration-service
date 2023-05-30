@@ -29,7 +29,7 @@ internal class ContextController(val contextRepository: ContextRepository) {
     @PatchMapping("/{context}/modules")
     fun setContextModules(@PathVariable context: String, @RequestBody modules: List<ContextModuleDTO>) {
         val entity = contextRepository.findByName(context)
-                .map { Context(it.name, modules.map {module -> ContextModule(module.name)}) }
+                .map { Context(it.id, it.name, modules.map {module -> ContextModule(module.name)}) }
                 .orElseThrow { EntityNotFoundException(context) }
         contextRepository.save(entity)
     }
