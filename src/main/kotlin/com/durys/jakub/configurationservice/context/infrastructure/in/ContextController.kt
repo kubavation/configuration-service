@@ -1,5 +1,6 @@
 package com.durys.jakub.configurationservice.context.infrastructure.`in`
 
+import com.durys.jakub.configurationservice.context.application.ContextApplicationService
 import com.durys.jakub.configurationservice.context.domain.Context
 import com.durys.jakub.configurationservice.context.domain.ContextModule
 import com.durys.jakub.configurationservice.context.infrastructure.ContextRepository
@@ -10,7 +11,8 @@ import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/contexts")
 @RestController
-internal class ContextController(val contextRepository: ContextRepository) {
+internal class ContextController(val contextRepository: ContextRepository,
+                                 val contextApplicationService: ContextApplicationService) {
 
     @GetMapping
     fun getAvailableContexts(): List<ContextDTO> {
@@ -28,9 +30,6 @@ internal class ContextController(val contextRepository: ContextRepository) {
 
     @PatchMapping("/{context}/modules")
     fun setContextModules(@PathVariable context: String, @RequestBody modules: List<ContextModuleDTO>) {
-        val entity = contextRepository.findByName(context)
-                .map { Context(it.id, it.name, modules.map {module -> ContextModule(module.name)}) }
-                .orElseThrow { EntityNotFoundException(context) }
-        contextRepository.save(entity)
+        contextApplicationService.setContextModules(context, modules)
     }
 }
