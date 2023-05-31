@@ -3,10 +3,14 @@ package com.durys.jakub.configurationservice.moduleconfiguration.domain
 import com.durys.jakub.configurationservice.module.domain.ModuleConfigurationPattern
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+import java.util.UUID
 
 @Document("module_configuration")
 internal data class ModuleConfiguration(@Id val id: String, val context: String, val module: String,
                                var configurations: List<Configuration> = emptyList()) {
+
+    constructor(context: String, module: String, configurations: List<Configuration>)
+            : this(UUID.randomUUID().toString(), context, module, configurations)
 
 
     fun configEnabled(config: String): Boolean {

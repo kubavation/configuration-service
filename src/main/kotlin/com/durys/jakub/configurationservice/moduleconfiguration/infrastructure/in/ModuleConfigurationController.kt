@@ -17,7 +17,7 @@ internal class ModuleConfigurationController(val moduleConfigurationService: Mod
     }
 
     @CachePut(value = ["config"], key = "#context.#moduleName")
-    @PostMapping("/{context}/{moduleName}")
+    @PatchMapping("/{context}/{moduleName}")
     fun setModuleConfiguration(@PathVariable context: String, @PathVariable moduleName: String, @RequestBody config: ModuleConfigurationDTO) {
         moduleConfigurationService.setModuleConfiguration(context, moduleName, config)
     }
