@@ -14,7 +14,7 @@ internal class ModuleConfigurationService(val moduleConfigurationRepository: Mod
     }
 
     fun setModuleConfiguration(context: String, moduleName: String, config: ModuleConfigurationDTO) {
-       moduleConfigurationRepository.findByModule(moduleName)?.let {
+       moduleConfigurationRepository.moduleConfiguration(context, moduleName)?.let {
            moduleConfigurationRepository.save(it.copy(configurations = config.configuration)) }
                ?: throw RuntimeException("Module $moduleName not found")
     }
