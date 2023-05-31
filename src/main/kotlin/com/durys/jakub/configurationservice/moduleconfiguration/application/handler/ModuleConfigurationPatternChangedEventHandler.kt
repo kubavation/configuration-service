@@ -10,7 +10,7 @@ internal class ModuleConfigurationPatternChangedEventHandler(val moduleConfigura
 
     @EventListener
     fun handle(event: ModuleConfigurationPatternChanged) {
-        
+
         val moduleConfigurations = moduleConfigurationRepository.moduleConfigurations(event.module)
                 .map { it.updateConfigurations(event.patterns)}
 
