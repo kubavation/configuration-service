@@ -2,4 +2,6 @@ package com.durys.jakub.configurationservice.moduleconfiguration.infrastructure.
 
 import com.durys.jakub.configurationservice.moduleconfiguration.domain.Configuration
 
-data class ModuleConfigurationDTO(val configuration: List<Configuration> = emptyList())
+data class ModuleConfigurationDTO(val configuration: List<Configuration>) {
+    constructor() : this(emptyList())
+}
