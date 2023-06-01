@@ -64,8 +64,9 @@ internal class ModuleController(val moduleRepository: ModuleRepository, val doma
 
     @DeleteMapping("/{name}/configuration-pattern/{pattern}")
     fun deleteModuleConfigurationPattern(@PathVariable name: String, @PathVariable pattern: String) {
+
         val module = moduleRepository.findByName(name)
-                .map { it.configPatterns.filter {configPattern -> configPattern.name != pattern }; return@map it }
+                .map { it.configPatterns = it.configPatterns.filter {configPattern -> configPattern.name != pattern }; return@map it }
                 .map { moduleRepository.save(it)}
                 .orElseThrow { EntityNotFoundException(name) }
 
