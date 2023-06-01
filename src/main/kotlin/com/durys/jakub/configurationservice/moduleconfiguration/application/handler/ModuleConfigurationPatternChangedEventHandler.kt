@@ -5,6 +5,7 @@ import com.durys.jakub.configurationservice.moduleconfiguration.infrastructure.M
 import mu.KotlinLogging
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 private val logger = KotlinLogging.logger {}
 
@@ -12,14 +13,19 @@ private val logger = KotlinLogging.logger {}
 internal class ModuleConfigurationPatternChangedEventHandler(val moduleConfigurationRepository: ModuleConfigurationRepository) {
 
     @EventListener
+    @Transactional
     fun handle(event: ModuleConfigurationPatternChanged) {
 
         logger.info { "handling ModuleConfigurationPatternChanged event | module = ${event.module}, patterns size = ${event.patterns.size}" }
 
         val moduleConfigurations = moduleConfigurationRepository.moduleConfigurations(event.module)
-                .map { it.updateConfigurations(event.patterns)}
 
-        moduleConfigurationRepository.saveAll(moduleConfigurations)
+        val updatedModuleConfigurations = moduleConfigurations.map { it.updateConfigurations(event.patterns)}
+
+        moduleConfigurations.map { it.configurations = emptyList(); return@map it; }
+                .forEach { moduleConfigurationRepository.delete(it) }
+
+        moduleConfigurationRepository.saveAll(updatedModuleConfigurations)
     }
 
 }
