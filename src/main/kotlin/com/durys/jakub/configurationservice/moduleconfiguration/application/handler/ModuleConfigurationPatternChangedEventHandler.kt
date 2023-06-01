@@ -3,6 +3,7 @@ package com.durys.jakub.configurationservice.moduleconfiguration.application.han
 import com.durys.jakub.configurationservice.module.domain.events.ModuleConfigurationPatternChanged
 import com.durys.jakub.configurationservice.moduleconfiguration.infrastructure.ModuleConfigurationRepository
 import mu.KotlinLogging
+import org.springframework.cache.CacheManager
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -10,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional
 private val logger = KotlinLogging.logger {}
 
 @Component
-internal class ModuleConfigurationPatternChangedEventHandler(val moduleConfigurationRepository: ModuleConfigurationRepository) {
+internal class ModuleConfigurationPatternChangedEventHandler(val moduleConfigurationRepository: ModuleConfigurationRepository,
+                                                             val cacheManager: CacheManager) {
 
     @EventListener
     @Transactional
@@ -23,9 +25,13 @@ internal class ModuleConfigurationPatternChangedEventHandler(val moduleConfigura
         val updatedModuleConfigurations = moduleConfigurations.map { it.updateConfigurations(event.patterns)}
 
         moduleConfigurations.map { it.configurations = emptyList(); return@map it; }
-                .forEach { moduleConfigurationRepository.delete(it) }
+                .forEach { moduleConfigurationRepository.delete(it);
+                           cacheManager.getCache("config")?.evict("${it.context},${it.module}")
+                }
 
         moduleConfigurationRepository.saveAll(updatedModuleConfigurations)
+
+
     }
 
 }
