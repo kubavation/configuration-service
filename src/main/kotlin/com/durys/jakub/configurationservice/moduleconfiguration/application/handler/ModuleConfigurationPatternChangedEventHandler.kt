@@ -21,18 +21,11 @@ internal class ModuleConfigurationPatternChangedEventHandler(val moduleConfigura
         logger.info { "handling ModuleConfigurationPatternChanged event | module = ${event.module}, patterns size = ${event.patterns.size}" }
 
         val moduleConfigurations = moduleConfigurationRepository.moduleConfigurations(event.module)
+                .map { it.updateConfigurations(event.patterns)}
 
-        val updatedModuleConfigurations = moduleConfigurations.map { it.updateConfigurations(event.patterns)}
+        moduleConfigurationRepository.saveAll(moduleConfigurations)
 
-        moduleConfigurations.map { it.configurations = emptyList(); return@map it; }
-                .forEach {
-                    moduleConfigurationRepository.save(it)
-                    configCacheService.evict(it.context, it.module)
-                }
-
-        moduleConfigurationRepository.saveAll(updatedModuleConfigurations)
-
-
+        moduleConfigurations.forEach { configCacheService.evict(it.context, it.module) }
     }
 
 }

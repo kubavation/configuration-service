@@ -18,16 +18,15 @@ internal data class ModuleConfiguration(@Id val id: String, val context: String,
     }
 
     fun updateConfigurations(patterns: List<ModuleConfigurationPattern>): ModuleConfiguration {
-        configurations = patterns.flatMap{ updateConfiguration(it) }
+        configurations = patterns.map { updateConfiguration(it) }.filterNotNull()
         return this
     }
 
-    private fun updateConfiguration(pattern: ModuleConfigurationPattern): List<Configuration> {
+    private fun updateConfiguration(pattern: ModuleConfigurationPattern): Configuration? {
         return if (!hasConfiguration(pattern.name)) {
-            configurations + Configuration(pattern.name, pattern.description, pattern.defaultValue)
+            Configuration(pattern.name, pattern.description, pattern.defaultValue)
         } else {
-            configurations.filter { it.name != pattern.name } + configurations.filter { it.name == pattern.name }
-                    .map { Configuration(it.name, pattern.description, it.value) }
+            configurations.find { it.name == pattern.name }?.let { Configuration(it.name, pattern.description, it.value) }
         }
     }
 
