@@ -64,4 +64,15 @@ internal class ContextApplicationServiceTest {
         assertThrows(ContextAlreadyExistsException::class.java) {contextApplicationService.edit(context.name, ContextDTO(context.name))}
     }
 
+    @Test
+    fun deleteContext_shouldSuccessfullyDeleteContext() {
+
+        val context = Context("Warsaw", emptyList())
+
+        Mockito.`when`(contextRepository.findByName(context.name)).thenReturn(Optional.ofNullable(context))
+
+        contextApplicationService.delete(context.name)
+        Mockito.verify(contextRepository).delete(context)
+    }
+
 }
