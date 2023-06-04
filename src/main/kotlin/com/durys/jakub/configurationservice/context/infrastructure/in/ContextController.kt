@@ -1,12 +1,9 @@
 package com.durys.jakub.configurationservice.context.infrastructure.`in`
 
 import com.durys.jakub.configurationservice.context.application.ContextApplicationService
-import com.durys.jakub.configurationservice.context.domain.Context
-import com.durys.jakub.configurationservice.context.domain.ContextModule
 import com.durys.jakub.configurationservice.context.infrastructure.ContextRepository
 import com.durys.jakub.configurationservice.context.infrastructure.model.ContextDTO
 import com.durys.jakub.configurationservice.context.infrastructure.model.ContextModuleDTO
-import com.durys.jakub.configurationservice.sharedkernel.exception.EntityNotFoundException
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/contexts")
@@ -20,6 +17,15 @@ internal class ContextController(val contextRepository: ContextRepository,
                 .map { ContextDTO(it.name) }
                 .toList()
     }
+
+    @PostMapping
+    fun addContext(@RequestBody context: ContextDTO) =contextApplicationService.create(context)
+
+    @PutMapping("/{contextName}")
+    fun editContext(@PathVariable contextName: String, @RequestBody context: ContextDTO) =contextApplicationService.edit(contextName, context)
+
+    @DeleteMapping("/{contextName}")
+    fun deleteContext(@PathVariable contextName: String) =contextApplicationService.delete(contextName)
 
     @GetMapping("/{context}/modules")
     fun getContextModules(@PathVariable context: String): List<ContextModuleDTO> {
