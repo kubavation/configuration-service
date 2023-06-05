@@ -12,4 +12,7 @@ internal interface ModuleConfigurationRepository: MongoRepository<ModuleConfigur
 
     @Query("{'module': ?0}")
     fun moduleConfigurations(moduleName: String): List<ModuleConfiguration>
+
+    @Query("{'context': ?0}")
+    fun contextModuleConfigurations(context: String): List<ModuleConfiguration>
 }
