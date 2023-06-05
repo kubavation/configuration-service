@@ -5,6 +5,7 @@ import com.durys.jakub.configurationservice.context.domain.ContextModule
 import com.durys.jakub.configurationservice.context.domain.ContextValidationService
 import com.durys.jakub.configurationservice.context.domain.event.ContextDeletedEvent
 import com.durys.jakub.configurationservice.context.domain.event.ContextModulesChangedEvent
+import com.durys.jakub.configurationservice.context.domain.event.ContextRenamedEvent
 import com.durys.jakub.configurationservice.context.domain.exception.ContextAlreadyExistsException
 import com.durys.jakub.configurationservice.context.infrastructure.ContextRepository
 import com.durys.jakub.configurationservice.context.infrastructure.model.ContextDTO
@@ -42,10 +43,12 @@ internal class ContextApplicationService(private val contextRepository: ContextR
             throw ContextAlreadyExistsException(context.name)
         }
 
-        contextRepository.findByName(contextName)
+       val saved =  contextRepository.findByName(contextName)
                 .map { Context(it.id, contextName, it.modules) }
                 .map { contextRepository.save(it) }
                 .orElseThrow { EntityNotFoundException(contextName) }
+
+        eventPublisher.publish(ContextRenamedEvent(contextName, saved.name))
     }
 
     fun delete(contextName: String) {
