@@ -1,4 +1,4 @@
-package com.durys.jakub.configurationservice.moduleconfiguration.application.handler
+package com.durys.jakub.configurationservice.moduleconfiguration.application.handler.context
 
 import com.durys.jakub.configurationservice.context.domain.event.ContextModulesChangedEvent
 import com.durys.jakub.configurationservice.module.domain.ModuleConfigurationPattern
