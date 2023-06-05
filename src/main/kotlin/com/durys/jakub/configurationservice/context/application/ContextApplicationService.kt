@@ -3,6 +3,7 @@ package com.durys.jakub.configurationservice.context.application
 import com.durys.jakub.configurationservice.context.domain.Context
 import com.durys.jakub.configurationservice.context.domain.ContextModule
 import com.durys.jakub.configurationservice.context.domain.ContextValidationService
+import com.durys.jakub.configurationservice.context.domain.event.ContextDeletedEvent
 import com.durys.jakub.configurationservice.context.domain.event.ContextModulesChangedEvent
 import com.durys.jakub.configurationservice.context.domain.exception.ContextAlreadyExistsException
 import com.durys.jakub.configurationservice.context.infrastructure.ContextRepository
@@ -49,6 +50,9 @@ internal class ContextApplicationService(private val contextRepository: ContextR
 
     fun delete(contextName: String) {
         contextRepository.findByName(contextName)
-                .ifPresent { contextRepository.delete(it) }
+                .ifPresent {
+                    contextRepository.delete(it)
+                    eventPublisher.publish(ContextDeletedEvent(contextName))
+                }
     }
 }
