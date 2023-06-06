@@ -20,7 +20,7 @@ internal class ModuleConfigurationGroupsController(val moduleRepository: ModuleR
     @PatchMapping
     fun setModuleConfigurationGroups(@PathVariable moduleName: String, @RequestBody configGroups: List<ConfigurationGroupDTO>) {
         val module = moduleRepository.findByName(moduleName)
-                .map { it with asConfigGroups(configGroups) }
+                .map { it withGroups asConfigGroups(configGroups) }
                 .orElseThrow { EntityNotFoundException(moduleName) }
         moduleRepository.save(module)
     }

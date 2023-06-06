@@ -22,7 +22,7 @@ internal class ModuleConfigurationPatternController(val moduleRepository: Module
     @PatchMapping
     fun setModuleConfigurationPatterns(@PathVariable moduleName: String, @RequestBody configPatterns: List<ConfigurationPatternDTO>) {
         val module = moduleRepository.findByName(moduleName)
-                .map { it with asConfigPatterns(configPatterns) }
+                .map { it withPatterns asConfigPatterns(configPatterns) }
                 .map { moduleRepository.save(it) }
                 .orElseThrow { EntityNotFoundException(moduleName) }
 

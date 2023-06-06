@@ -11,12 +11,12 @@ internal class Module(@Id val id: String, val name: String, val description: Str
     constructor(name: String, description: String, configPatterns: List<ModuleConfigurationPattern>, configGroups: List<ModuleConfigurationGroup>)
             : this(UUID.randomUUID().toString(), name, description, configPatterns, configGroups)
 
-    infix fun with(patterns: List<ModuleConfigurationPattern>): Module {
+    infix fun withPatterns(patterns: List<ModuleConfigurationPattern>): Module {
         this.configPatterns = this.configPatterns + patterns
         return this
     }
 
-    infix fun with(groups: List<ModuleConfigurationGroup>): Module {
+    infix fun withGroups(groups: List<ModuleConfigurationGroup>): Module {
         this.configGroups = this.configGroups + groups
         return this
     }
