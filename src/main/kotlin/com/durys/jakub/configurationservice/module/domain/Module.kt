@@ -15,4 +15,9 @@ internal class Module(@Id val id: String, val name: String, val description: Str
         this.configPatterns = this.configPatterns + patterns
         return this
     }
+
+    infix fun with(groups: List<ModuleConfigurationGroup>): Module {
+        this.configGroups = this.configGroups + groups
+        return this
+    }
 }
