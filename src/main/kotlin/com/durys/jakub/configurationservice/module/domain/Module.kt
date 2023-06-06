@@ -6,9 +6,10 @@ import java.util.UUID
 
 @Document("module")
 internal class Module(@Id val id: String, val name: String, val description: String,
-                      var configPatterns: List<ModuleConfigurationPattern> = listOf()) {
-    constructor(name: String, description: String, configPatterns: List<ModuleConfigurationPattern>)
-            : this(UUID.randomUUID().toString(), name, description, configPatterns)
+                      var configPatterns: List<ModuleConfigurationPattern> = emptyList(),
+                      var configGroups: List<ModuleConfigurationGroup> = emptyList()) {
+    constructor(name: String, description: String, configPatterns: List<ModuleConfigurationPattern>, configGroups: List<ModuleConfigurationGroup>)
+            : this(UUID.randomUUID().toString(), name, description, configPatterns, configGroups)
 
     infix fun with(patterns: List<ModuleConfigurationPattern>): Module {
         this.configPatterns = this.configPatterns + patterns
