@@ -1,6 +1,5 @@
 package com.durys.jakub.configurationservice.module.infrastructure.`in`
 
-import com.durys.jakub.configurationservice.events.DomainEventPublisher
 import com.durys.jakub.configurationservice.module.domain.Module
 import com.durys.jakub.configurationservice.module.infrastructure.ModuleRepository
 import com.durys.jakub.configurationservice.module.infrastructure.model.ModuleDTO
