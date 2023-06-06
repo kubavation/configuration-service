@@ -18,9 +18,9 @@ internal class ModuleConfigurationGroupsController(val moduleRepository: ModuleR
     }
 
     @PatchMapping
-    fun setModuleConfigurationGroups(@PathVariable moduleName: String, @RequestBody configGroup: ConfigurationGroupDTO) {
+    fun addModuleConfigurationGroup(@PathVariable moduleName: String, @RequestBody configGroup: ConfigurationGroupDTO) {
         val module = moduleRepository.findByName(moduleName)
-                .map { it withGroups asConfigGroups(listOf(configGroup)) }
+                .map { it withGroups listOf(ModuleConfigurationGroup(configGroup.name, configGroup.description)) }
                 .orElseThrow { EntityNotFoundException(moduleName) }
         moduleRepository.save(module)
     }
@@ -35,9 +35,9 @@ internal class ModuleConfigurationGroupsController(val moduleRepository: ModuleR
         moduleRepository.save(module)
     }
 
-    @PatchMapping("/{group}")
-    fun patchModuleConfigurationGroup(@PathVariable moduleName: String, @PathVariable group: String,
-                                        @RequestBody configGroup: ConfigurationGroupDTO) {
+    @PutMapping("/{group}")
+    fun editModuleConfigurationGroup(@PathVariable moduleName: String, @PathVariable group: String,
+                                     @RequestBody configGroup: ConfigurationGroupDTO) {
 
         val module = moduleRepository.findByName(moduleName)
                 .map {module -> module.configGroups.filter { it.name != group } + module.configGroups.filter { it.name == group }
@@ -48,11 +48,6 @@ internal class ModuleConfigurationGroupsController(val moduleRepository: ModuleR
                 .orElseThrow { EntityNotFoundException(moduleName) }
 
         moduleRepository.save(module)
-    }
-
-
-    private fun asConfigGroups(configGroups: List<ConfigurationGroupDTO>): List<ModuleConfigurationGroup> {
-        return configGroups.map { ModuleConfigurationGroup(it.name, it.description) }
     }
 
 }
