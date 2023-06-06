@@ -1,11 +1,8 @@
 package com.durys.jakub.configurationservice.module.infrastructure.`in`
 
 import com.durys.jakub.configurationservice.module.domain.ModuleConfigurationGroup
-import com.durys.jakub.configurationservice.module.domain.ModuleConfigurationPattern
-import com.durys.jakub.configurationservice.module.domain.events.ModuleConfigurationPatternChanged
 import com.durys.jakub.configurationservice.module.infrastructure.ModuleRepository
 import com.durys.jakub.configurationservice.module.infrastructure.model.ConfigurationGroupDTO
-import com.durys.jakub.configurationservice.module.infrastructure.model.ConfigurationPatternDTO
 import com.durys.jakub.configurationservice.sharedkernel.exception.EntityNotFoundException
 import org.springframework.web.bind.annotation.*
 
