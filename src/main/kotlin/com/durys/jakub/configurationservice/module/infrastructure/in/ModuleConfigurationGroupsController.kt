@@ -3,6 +3,7 @@ package com.durys.jakub.configurationservice.module.infrastructure.`in`
 import com.durys.jakub.configurationservice.module.domain.ModuleConfigurationGroup
 import com.durys.jakub.configurationservice.module.infrastructure.ModuleRepository
 import com.durys.jakub.configurationservice.module.infrastructure.model.ConfigurationGroupDTO
+import com.durys.jakub.configurationservice.module.infrastructure.model.ConfigurationPatternDTO
 import com.durys.jakub.configurationservice.sharedkernel.exception.EntityNotFoundException
 import org.springframework.web.bind.annotation.*
 
@@ -15,6 +16,16 @@ internal class ModuleConfigurationGroupsController(val moduleRepository: ModuleR
         return moduleRepository.findByName(moduleName)
                 .map { it.configGroups.map {group -> ConfigurationGroupDTO(group.name, group.description) } }
                 .orElseThrow { EntityNotFoundException(moduleName) }
+    }
+
+    @GetMapping("/{group}/patterns")
+    fun getModuleConfigurationGroupPatterns(@PathVariable moduleName: String, @PathVariable group: String): List<ConfigurationPatternDTO> {
+        val patterns = moduleRepository.findByName(moduleName)
+                .map { it.configPatterns }
+                .orElseThrow { EntityNotFoundException(moduleName) }
+
+        return patterns.filter { pattern -> pattern.group?.name == group }
+                .map { ConfigurationPatternDTO(it.name, it.description, it.defaultValue) }
     }
 
     @PatchMapping
