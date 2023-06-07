@@ -28,7 +28,7 @@ internal class ModuleConfigurationGroupsController(val moduleRepository: ModuleR
                 .map { ConfigurationPatternDTO(it.name, it.description, it.defaultValue) }
     }
 
-    @PatchMapping
+    @PostMapping
     fun addModuleConfigurationGroup(@PathVariable moduleName: String, @RequestBody configGroup: ConfigurationGroupDTO) {
         val module = moduleRepository.findByName(moduleName)
                 .map { it withGroups listOf(ModuleConfigurationGroup(configGroup.name, configGroup.description)) }
