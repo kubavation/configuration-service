@@ -33,7 +33,7 @@ internal class ModuleConfigurationPatternController(val moduleRepository: Module
     fun deleteModuleConfigurationPattern(@PathVariable moduleName: String, @PathVariable pattern: String) {
 
         val module = moduleRepository.findByName(moduleName)
-                .map { it.configPatterns = it.configPatterns.filter {configPattern -> configPattern.name != pattern }; return@map it }
+                .map { it.removePattern(pattern) }
                 .map { moduleRepository.save(it)}
                 .orElseThrow { EntityNotFoundException(moduleName) }
 

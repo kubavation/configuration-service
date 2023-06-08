@@ -11,6 +11,7 @@ internal class Module(@Id val id: String, val name: String, val description: Str
     constructor(name: String, description: String, configPatterns: List<ModuleConfigurationPattern>, configGroups: List<ModuleConfigurationGroup>)
             : this(UUID.randomUUID().toString(), name, description, configPatterns, configGroups)
 
+
     infix fun withPatterns(patterns: List<ModuleConfigurationPattern>): Module {
         this.configPatterns = this.configPatterns + patterns
         return this
@@ -20,4 +21,15 @@ internal class Module(@Id val id: String, val name: String, val description: Str
         this.configGroups = this.configGroups + groups
         return this
     }
+
+    fun removeGroup(groupName: String): Module {
+        this.configGroups = this.configGroups.filter { it.name != groupName }
+        return this
+    }
+
+    fun removePattern(patternName: String): Module {
+        this.configPatterns = this.configPatterns.filter { it.name != patternName }
+        return this
+    }
+
 }

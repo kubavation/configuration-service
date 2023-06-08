@@ -40,7 +40,7 @@ internal class ModuleConfigurationGroupsController(val moduleRepository: ModuleR
     fun deleteModuleConfigurationGroup(@PathVariable moduleName: String, @PathVariable group: String) {
 
         val module = moduleRepository.findByName(moduleName)
-                .map { it.configGroups = it.configGroups.filter {configGroup -> configGroup.name != group }; return@map it }
+                .map { it.removeGroup(group) }
                 .orElseThrow { EntityNotFoundException(moduleName) }
 
         moduleRepository.save(module)

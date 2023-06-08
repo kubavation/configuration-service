@@ -24,14 +24,14 @@ internal class ModuleController(val moduleRepository: ModuleRepository) {
         val module = moduleRepository.findByName(name)
                 .map { Module(it.id, moduleDTO.name, moduleDTO.description, it.configPatterns, it.configGroups) }
                 .orElseThrow { EntityNotFoundException(name) }
+
         moduleRepository.save(module)
     }
 
     @DeleteMapping("/{name}")
     fun deleteModule(@PathVariable name: String) {
-        val module = moduleRepository.findByName(name)
-                .orElseThrow { EntityNotFoundException(name) }
-        moduleRepository.delete(module)
+        moduleRepository.findByName(name)
+                .ifPresentOrElse({module ->  moduleRepository.delete(module) }, {throw EntityNotFoundException(name) })
     }
 
 
