@@ -50,7 +50,6 @@ internal class ModuleConfigurationGroupsController(val moduleRepository: ModuleR
     fun editModuleConfigurationGroup(@PathVariable moduleName: String, @PathVariable group: String,
                                      @RequestBody configGroup: ConfigurationGroupDTO) {
 
-        todo set
         val module = moduleRepository.findByName(moduleName)
                 .map {module -> module.configGroups.filter { it.name != group } + module.configGroups.filter { it.name == group }
                         .map { ModuleConfigurationGroup(it.name, configGroup.description) }

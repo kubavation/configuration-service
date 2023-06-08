@@ -27,4 +27,9 @@ internal class Module(@Id val id: String, val name: String, val description: Str
         return this
     }
 
+    fun removePattern(patternName: String): Module {
+        this.configPatterns = this.configPatterns.filter { it.name != patternName }
+        return this
+    }
+
 }
