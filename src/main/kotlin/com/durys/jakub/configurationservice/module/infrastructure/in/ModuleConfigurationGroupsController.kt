@@ -40,7 +40,7 @@ internal class ModuleConfigurationGroupsController(val moduleRepository: ModuleR
     fun deleteModuleConfigurationGroup(@PathVariable moduleName: String, @PathVariable group: String) {
 
         val module = moduleRepository.findByName(moduleName)
-                .map { it.configGroups = it.configGroups.filter {configGroup -> configGroup.name != group }; return@map it }
+                .map { it.removeGroup(group) }
                 .orElseThrow { EntityNotFoundException(moduleName) }
 
         moduleRepository.save(module)
@@ -50,6 +50,7 @@ internal class ModuleConfigurationGroupsController(val moduleRepository: ModuleR
     fun editModuleConfigurationGroup(@PathVariable moduleName: String, @PathVariable group: String,
                                      @RequestBody configGroup: ConfigurationGroupDTO) {
 
+        todo set
         val module = moduleRepository.findByName(moduleName)
                 .map {module -> module.configGroups.filter { it.name != group } + module.configGroups.filter { it.name == group }
                         .map { ModuleConfigurationGroup(it.name, configGroup.description) }
