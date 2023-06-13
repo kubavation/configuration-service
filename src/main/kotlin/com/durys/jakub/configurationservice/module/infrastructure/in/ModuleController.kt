@@ -1,6 +1,7 @@
 package com.durys.jakub.configurationservice.module.infrastructure.`in`
 
 import com.durys.jakub.configurationservice.module.domain.Module
+import com.durys.jakub.configurationservice.module.domain.ModuleValidationService
 import com.durys.jakub.configurationservice.module.infrastructure.ModuleRepository
 import com.durys.jakub.configurationservice.module.infrastructure.model.ModuleDTO
 import com.durys.jakub.configurationservice.sharedkernel.exception.EntityNotFoundException
@@ -8,11 +9,14 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/modules")
-internal class ModuleController(val moduleRepository: ModuleRepository) {
+internal class ModuleController(val moduleRepository: ModuleRepository,
+                                val moduleValidationService: ModuleValidationService) {
 
     @GetMapping
     fun getModules(): List<ModuleDTO> = moduleRepository.findAll().map { ModuleDTO(it.name, it.description) }
 
+    @GetMapping("{moduleName}/validation/name-exists")
+    fun moduleAlreadyExists(@PathVariable moduleName: String) = moduleValidationService.moduleWithNameExists(moduleName)
 
     @PostMapping
     fun addModule(@RequestBody moduleDTO: ModuleDTO) = moduleRepository.save(
